@@ -1,24 +1,19 @@
 const http = require("http");
-const fs = require("fs")
+const fs = require("fs");
 
-const server = http.createServer((request, response) => {
-    response.writeHead(200)
-    contents = fs.readFile('home.html',{encoding: "utf-8"}, (error,data) => {
-        if (error) {
-            console.log(error)
-            throw error
-        }
-    })
-    console.log(contents)
-    while (contents == undefined || tick == 1000){
-        response.end(contents)
+async function readFile(filePath) {
+    fs.readFile(filePath, "utf8", function (err, data) {
+        return String(data);
+    });
+}
+
+const server = http.createServer(function(req, res) {
+    res.writeHead(200);
+    try {
+        res.end(Promise.then(readFile("home.html")))
+    } catch (error) {
+        console.log(readFile("home.html"))
     }
-    response.end(contents)
-})
+});
 
-const PORT = 3000
-const HOST = "127.0.0.1"
-
-server.listen(PORT, HOST, () => {
-   console.log("running on port " + PORT)
-})
+server.listen(3000,"127.0.0.1");
