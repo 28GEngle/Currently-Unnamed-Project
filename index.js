@@ -3,14 +3,17 @@ const fs = require("fs");
 
 async function readFile(filePath) {
     fs.readFile(filePath, "utf8", function (err, data) {
-        return String(data);
+        promise = Promise.resolve(String(data));
+        promise.then((value) => {
+            return value
+        })
     });
 }
 
 const server = http.createServer(function(req, res) {
     res.writeHead(200);
     try {
-        res.end(Promise.then(readFile("home.html")))
+        res.end(readFile("home.html"))
     } catch (error) {
         console.log(readFile("home.html"))
     }
